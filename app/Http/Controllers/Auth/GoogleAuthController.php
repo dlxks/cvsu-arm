@@ -10,32 +10,30 @@ use Illuminate\Support\Str;
 
 class GoogleAuthController extends Controller
 {
-    // 1. Redirect to Google
     public function redirect()
     {
         return Socialite::driver('google')->redirect();
     }
 
-    // 2. Handle Callback
     public function callback()
     {
         try {
             $googleUser = Socialite::driver('google')->user();
             $email = $googleUser->getEmail();
 
-            // CONSTRAINT: Domain Restriction
+            // 1. Domain Restriction
             if (!Str::endsWith($email, ['@cvsu.edu.ph', '@gmail.com'])) {
                 return redirect('/')->with('error', 'CvSU - Academic Resource Management can only be used within its organization.');
             }
 
-            // CONSTRAINT: Manual Sign-in Only (User must already exist)
-            $user = User::where('email', $googleUser->getEmail())->first();
+            // 2. Manual User Check
+            $user = User::where('email', $email)->first();
 
             if (!$user) {
                 return redirect('/')->with('error', 'Access denied. You are not registered in the system.');
             }
 
-            // Update user with latest Google info (optional but good for avatars)
+            // 3. Update & Login
             $user->update([
                 'google_id' => $googleUser->getId(),
                 'avatar' => $googleUser->getAvatar(),
@@ -43,7 +41,17 @@ class GoogleAuthController extends Controller
 
             Auth::login($user);
 
-            return redirect('/dashboard');
+            // 4. Role Redirection matching web.php
+            if ($user->hasRole('admin')) {
+                return redirect()->to('/admin/dashboard');
+            }
+
+            if ($user->hasRole('faculty')) {
+                return redirect()->to('/dashboard');
+            }
+
+            // Fallback for users with no role
+            return redirect('/')->with('error', 'No role assigned to this account.');
         } catch (\Exception $e) {
             return redirect('/')->with('error', 'Authentication failed. Please try again.');
         }
@@ -52,6 +60,6 @@ class GoogleAuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect('/');
+        return redirect()->route('login');
     }
 }

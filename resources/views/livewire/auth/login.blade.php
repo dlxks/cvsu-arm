@@ -18,7 +18,7 @@ new #[Layout('components.layouts.app')] class extends Component {
 
         @if (session('error'))
         <flux:callout variant="danger" icon="x-circle" class="mb-6">
-            <flux:callout.heading>{{ session('error') }}</flux:callout.heading>
+            {{ session('error') }}
         </flux:callout>
         @endif
 

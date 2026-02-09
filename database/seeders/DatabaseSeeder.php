@@ -18,11 +18,11 @@ class DatabaseSeeder extends Seeder
         User::factory()->createMany([[
             'name' => 'Test User',
             'email' => 'tristan.sangangbayan@cvsu.edu.ph',
-            'role' => 'admin'
+            // 'role' => 'admin'
         ], [
             'name' => 'Test User2',
             'email' => 'sangangbayant@gmail.com',
-            'role' => 'faculty'
+            // 'role' => 'faculty'
         ]]);
     }
 }

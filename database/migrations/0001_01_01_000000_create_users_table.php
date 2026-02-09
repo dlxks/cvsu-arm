@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('google_id')->nullable()->unique();
             $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->enum('role', ['admin', 'faculty'])->default('faculty');
+            // $table->enum('role', ['admin', 'faculty'])->default('faculty');
             $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
