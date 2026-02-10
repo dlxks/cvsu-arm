@@ -40,15 +40,15 @@
     <div class="flex items-center justify-center">
         <div x-show="theme === 'light'" x-cloak>
             <flux:icon.sun
-                class="size-5 text-gray-400 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-white" />
+                class="size-5 text-zinc-400 dark:text-zinc-300 group-hover:text-zinc-800 dark:group-hover:text-white" />
         </div>
         <div x-show="theme === 'dark'" x-cloak>
             <flux:icon.moon
-                class="size-5 text-gray-400 dark:text-gray-300 group-hover:text-gray-800 dark:group-hover:text-white" />
+                class="size-5 text-zinc-400 dark:text-zinc-300 group-hover:text-zinc-800 dark:group-hover:text-white" />
         </div>
         <div x-show=" theme==='system'" x-cloak>
             <flux:icon.computer-desktop
-                class="size-5 text-gray-400 dark:text-gray-200 group-hover:text-gray-800 dark:group-hover:text-white" />
+                class="size-5 text-zinc-400 dark:text-zinc-400 group-hover:text-zinc-800 dark:group-hover:text-white" />
         </div>
     </div>
 

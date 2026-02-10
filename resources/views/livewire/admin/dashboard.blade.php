@@ -3,8 +3,7 @@
 use Livewire\Volt\Component;
 use Livewire\Attributes\Layout;
 
-new #[Layout('layouts.app')] 
-class extends Component {
+new #[Layout('layouts.app')] class extends Component {
     public function with(): array
     {
         return [
@@ -13,8 +12,8 @@ class extends Component {
     }
 }; ?>
 
-<div class="p-8">
-    <flux:heading size="xl" level="1">Admin Dashboard</flux:heading>
+<div class="space-y-4">
+    <flux:heading size="lg" level="1">Admin Dashboard</flux:heading>
     <flux:subheading>Welcome, {{ auth()->user()->name }}</flux:subheading>
 
     <flux:separator class="my-6" />

@@ -18,7 +18,7 @@ class RoleSeeder extends Seeder
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $facultyRole = Role::firstOrCreate(['name' => 'faculty']);
 
-        // Create Admin User (Removed the extra nested brackets)
+        // Create Admin User
         $user = User::create([
             'name' => 'System Admin',
             'email' => 'tristan.sangangbayan@cvsu.edu.ph',

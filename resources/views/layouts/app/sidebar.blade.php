@@ -5,13 +5,15 @@
     @include('partials.head')
 </head>
 
-<body class="min-h-screen bg-white dark:bg-zinc-800">
+<body class="min-h-screen bg-white dark:bg-zinc-800 max-w-7xl mx-auto">
     <flux:sidebar sticky collapsible="mobile"
         class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         {{-- Sidebar Header --}}
         <flux:sidebar.header>
             <a href="{{ route('dashboard.resolve') }}" wire:navigate
-                class="flex items-center px-2 text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                class="flex items-center px-2 gap-2 text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+
+                <img src="{{ asset('images/CvSU-Logo.png') }}" alt="CvSU Icon" class="w-6">
                 CvSU - ARM
             </a>
 
@@ -45,17 +47,21 @@
                 {{-- Research & Extensions --}}
                 <flux:sidebar.group heading="Research & Extension" class="grid">
                     <flux:sidebar.item icon="book-open" href="#">Researches</flux:sidebar.item>
-                    <flux:sidebar.item icon="puzzle-piece" href="#">Extensions</flux:sidebar.item>
+                    <flux:sidebar.item icon="document-text" href="#">Extensions</flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.group>
 
-            <flux:separator />
 
             {{-- User Management --}}
+            @role('admin')
+            <flux:separator />
             <flux:sidebar.group expandable heading="System" class="grid">
-                <flux:sidebar.item icon="identification" href="#">Faculty List</flux:sidebar.item>
+                <flux:sidebar.item icon="identification" :href="route('admin.faculty')" :current="request()->routeIs(
+                        'admin.faculty',
+                    )" wire:navigate>Faculty List</flux:sidebar.item>
                 <flux:sidebar.item icon="users" href="#">Users</flux:sidebar.item>
             </flux:sidebar.group>
+            @endrole
         </flux:sidebar.nav>
 
         <flux:spacer />
@@ -65,8 +71,8 @@
     </flux:sidebar>
 
     {{-- Mobile Header --}}
-    <flux:header class="lg:hidden">
-        <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
+    <flux:header>
+        <flux:sidebar.toggle class="lg:hidden" icon="bars-3" inset="left" />
 
         <flux:spacer />
 
