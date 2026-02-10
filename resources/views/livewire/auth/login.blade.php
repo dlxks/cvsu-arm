@@ -7,20 +7,24 @@ new #[Layout('components.layouts.app')] class extends Component {
     // No specific logic needed here, just the view
 }; ?>
 
-<div class="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-900">
+<div class="flex flex-col min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-900">
+    <div class="text-center mb-8 flex flex-col items-center gap-2">
+        <!-- CvSU Icon -->
+        <img src="{{ asset('images/CvSU-Logo.png') }}" alt="CvSU Icon" class="w-22">
+
+        <!-- App Name -->
+        <h1 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">{{ config('app.name') }}</h1>
+    </div>
     <div
         class="w-full max-w-sm p-6 bg-white rounded-xl shadow-lg border border-zinc-200 dark:bg-zinc-800 dark:border-zinc-700">
-
-        <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">{{ config('app.name') }}</h1>
-            <p class="text-sm text-zinc-500 mt-2">Faculty & Admin Access Only</p>
-        </div>
 
         @if (session('error'))
         <flux:callout variant="danger" icon="x-circle" class="mb-6">
             {{ session('error') }}
         </flux:callout>
         @endif
+
+        <p class="text-sm text-zinc-500 mt-2 text-center mb-2">Faculty & Admin Access Only</p>
 
         <div class="space-y-4">
             <flux:button href="{{ route('google.redirect') }}" variant="filled" class="w-full justify-center gap-2">

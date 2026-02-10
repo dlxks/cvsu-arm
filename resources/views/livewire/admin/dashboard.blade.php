@@ -3,8 +3,14 @@
 use Livewire\Volt\Component;
 use Livewire\Attributes\Layout;
 
-new #[Layout('components.layouts.app')] class extends Component {
-    // Admin specific logic can go here
+new #[Layout('layouts.app')] 
+class extends Component {
+    public function with(): array
+    {
+        return [
+            'title' => 'Admin Dashboard',
+        ];
+    }
 }; ?>
 
 <div class="p-8">
@@ -15,28 +21,21 @@ new #[Layout('components.layouts.app')] class extends Component {
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <flux:card>
-            <flux:icon.users class="mb-2 text-zinc-500" />
+            <flux:icon.users class="mb-2" />
             <h3 class="font-semibold text-lg">User Management</h3>
-            <p class="text-zinc-500 text-sm mb-4">Add, remove, or modify system users.</p>
-
-            {{-- <flux:button href="{{ route('admin.users') }}" size="sm" variant="primary" class="w-full">
+            <p class="text-sm mb-4">Add, remove, or modify system users.</p>
+            <flux:button href="#" size="sm" variant="primary" class="w-full">
                 Manage Users
-            </flux:button> --}}
+            </flux:button>
         </flux:card>
 
         <flux:card>
-            <flux:icon.cog class="mb-2 text-zinc-500" />
+            <flux:icon.cog class="mb-2 " />
             <h3 class="font-semibold text-lg">System Settings</h3>
-            <p class="text-zinc-500 text-sm mb-4">Configure application defaults.</p>
-
+            <p class="text-sm mb-4">Configure application defaults.</p>
             <flux:button href="#" size="sm" class="w-full">
                 Settings
             </flux:button>
         </flux:card>
-
-        <form method="POST" action="{{ route('logout') }}" class="mt-8">
-            @csrf
-            <flux:button type="submit" variant="danger">Logout</flux:button>
-        </form>
     </div>
 </div>

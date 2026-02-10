@@ -42,13 +42,7 @@ class GoogleAuthController extends Controller
             Auth::login($user);
 
             // 4. Role Redirection matching web.php
-            if ($user->hasRole('admin')) {
-                return redirect()->to('/admin/dashboard');
-            }
-
-            if ($user->hasRole('faculty')) {
-                return redirect()->to('/dashboard');
-            }
+            return redirect()->route('dashboard.resolve');
 
             // Fallback for users with no role
             return redirect('/')->with('error', 'No role assigned to this account.');
