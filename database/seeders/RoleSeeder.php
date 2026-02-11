@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -14,28 +13,46 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create Roles
+        // 1. Create Roles
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $facultyRole = Role::firstOrCreate(['name' => 'faculty']);
 
-        // Create Admin User
-        $user = User::create([
-            'name' => 'System Admin',
-            'email' => 'tristan.sangangbayan@cvsu.edu.ph',
+        // 2. Create Admin User
+        $admin = User::create([
+            'name'      => 'Tristan Sangangbayan',
+            'email'     => 'tristan.sangangbayan@cvsu.edu.ph',
             'google_id' => null,
-            'avatar' => null,
-        ]);
-        // Assign Role
-        $user->assignRole($adminRole);
-
-        // Create Faculty User
-        $user2 = User::create([
-            'name' => 'Faculty Account',
-            'email' => 'sangangbayant@gmail.com',
-            'google_id' => null,
-            'avatar' => null,
+            'avatar'    => null,
         ]);
 
-        $user2->assignRole($facultyRole);
+        $admin->assignRole($adminRole);
+
+        // Create Profile for Admin
+        $admin->facultyProfile()->create([
+            'first_name' => 'Tristan',
+            'last_name'  => 'Sangangbayan',
+            'branch'     => 'Main Campus',
+            'department' => 'Department of Information Technology',
+            'email'      => 'tristan.sangangbayan@cvsu.edu.ph',
+        ]);
+
+        // 3. Create Faculty User
+        $faculty = User::create([
+            'name'      => 'Faculty Account',
+            'email'     => 'sangangbayant@gmail.com',
+            'google_id' => null,
+            'avatar'    => null,
+        ]);
+
+        $faculty->assignRole($facultyRole);
+
+        // Create Profile for Faculty
+        $faculty->facultyProfile()->create([
+            'first_name' => 'Faculty',
+            'last_name'  => 'Account',
+            'branch'     => 'Cavite City Campus',
+            'department' => 'Department of Arts and Sciences',
+            'email'      => 'sangangbayant@gmail.com',
+        ]);
     }
 }
