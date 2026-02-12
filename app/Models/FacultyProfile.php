@@ -11,7 +11,7 @@ class FacultyProfile extends Model
     /** @use HasFactory<\Database\Factories\FacultyProfileFactory> */
     use HasFactory;
 
-    protected $table = 'profiles';
+    protected $table = 'faculty_profiles';
 
     protected $fillable = [
         'user_id',

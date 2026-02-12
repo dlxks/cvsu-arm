@@ -78,7 +78,7 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function profile(): HasOne
+    public function facultyProfile(): HasOne
     {
         return $this->hasOne(FacultyProfile::class, 'user_id', 'id');
     }
