@@ -17,6 +17,7 @@
         "livewire/flux": "^2.11",
         "livewire/livewire": "^4.1",
         "livewire/volt": "^1.10",
+        "maatwebsite/excel": "^3.1",
         "openspout/openspout": "4.32.0",
         "power-components/livewire-powergrid": "^6.8",
         "spatie/laravel-permission": "^6.24"

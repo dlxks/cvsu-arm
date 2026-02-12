@@ -3,11 +3,14 @@
 namespace App\Livewire\Admin;
 
 use App\Models\FacultyProfile;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
+use PowerComponents\LivewirePowerGrid\Components\SetUp\Responsive;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
@@ -27,6 +30,7 @@ final class FacultyProfileTable extends PowerGridComponent
         config(['livewire-powergrid.filter' => 'outside']);
     }
 
+
     public function setUp(): array
     {
         $this->showCheckBox();
@@ -38,38 +42,30 @@ final class FacultyProfileTable extends PowerGridComponent
 
             PowerGrid::header()
                 ->showSearchInput()
-                ->showToggleColumns(),
+                ->showToggleColumns()
+                ->showSoftDeletes(showMessage: true),
 
             PowerGrid::footer()
-                ->showPerPage(perPage: 25, perPageValues: [10, 25, 50, 100])
+                ->showPerPage(perPage: 10, perPageValues: [10, 25, 50, 100])
                 ->showRecordCount(),
+
+            PowerGrid::responsive()
+                ->fixedColumns('first_name', 'last_name', Responsive::ACTIONS_COLUMN_NAME),
         ];
     }
 
     public function datasource(): Builder
     {
-        return FacultyProfile::query()
-            ->with('user')
-            ->whereHas('user', function ($query) {
-                $query->role('faculty');
-            });
+        // Optimized eager loading
+        return FacultyProfile::query()->with('user');
     }
 
-    public function template(): ?string
-    {
-        return \App\Livewire\PowerGridTheme::class;
-    }
-
-    // Search with relationship
     public function relationSearch(): array
     {
         return [
-            'user' => [
-                'name',
-            ],
+            'user' => ['name', 'email'],
         ];
     }
-
 
     public function fields(): PowerGridFields
     {
@@ -85,10 +81,7 @@ final class FacultyProfileTable extends PowerGridComponent
             ->add('contactno')
             ->add('address')
             ->add('sex')
-            ->add('birthday_formatted', fn($model) => Carbon::parse($model->birthday)->format('d/m/Y'))
-            ->add('updated_by')
-            ->add('created_at_formatted', fn($model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
-            ->add('updated_at_formatted', fn($model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
+            ->add('birthday_formatted', fn(FacultyProfile $model) => $model->birthday ? Carbon::parse($model->birthday)->format('d/m/Y') : '-');
     }
 
     public function columns(): array
@@ -147,75 +140,98 @@ final class FacultyProfileTable extends PowerGridComponent
                 ->sortable()
                 ->hidden(isHidden: true, isForceHidden: false),
 
-            Column::make('Updated by', 'updated_by')
-                ->hidden(isHidden: true, isForceHidden: false),
-
-            Column::make('Created at', 'created_at_formatted', 'created_at')
-                ->sortable()
-                ->hidden(isHidden: true, isForceHidden: false),
-
-            Column::make('Updated at', 'updated_at_formatted', 'updated_at')
-                ->sortable()
-                ->hidden(isHidden: true, isForceHidden: false),
-
+            Column::action('Action')
         ];
     }
 
     public function filters(): array
     {
         return [
-            Filter::select('branch')
+            Filter::select('branch', 'branch')
                 ->dataSource(FacultyProfile::select('branch')->distinct()->get())
                 ->optionLabel('branch')
                 ->optionValue('branch'),
 
-            Filter::select('department')
+            Filter::select('department', 'department')
                 ->dataSource(FacultyProfile::select('department')->distinct()->get())
                 ->optionLabel('department')
                 ->optionValue('department'),
-
-            Filter::select('academic_rank')
-                ->dataSource(FacultyProfile::select('academic_rank')->distinct()->get())
-                ->optionLabel('academic_rank')
-                ->optionValue('academic_rank'),
-
-            Filter::select('sex')
-                ->dataSource(FacultyProfile::select('sex')->distinct()->get())
-                ->optionLabel('sex')
-                ->optionValue('sex'),
-
-            // Filter::datetimepicker('birthday'),
-            // Filter::datetimepicker('created_at'),
-            // Filter::datetimepicker('updated_at'),
         ];
     }
 
     #[\Livewire\Attributes\On('edit')]
     public function edit($rowId): void
     {
-        $this->js('alert(' . $rowId . ')');
+        $this->js("alert('Editing ID: ' + $rowId)");
     }
 
-    // public function actions($row): array
-    // {
-    //     return [
-    //         Button::add('edit')
-    //             ->slot('Edit: ' . $row->id)
-    //             ->id()
-    //             ->class('pg-btn-white dark:ring-pg-primary-600 dark:border-pg-primary-600 dark:hover:bg-pg-primary-700 dark:ring-offset-pg-primary-800 dark:text-pg-primary-300 dark:bg-pg-primary-700')
-    //             ->dispatch('edit', ['rowId' => $row->id])
-    //     ];
-    // }
-
-    /*
-    public function actionRules($row): array
+    #[\Livewire\Attributes\On('singleDelete')]
+    public function singleDelete($rowId): void
     {
-       return [
-            // Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($row) => $row->id === 1)
-                ->hide(),
+        $this->checkboxValues = [$rowId];
+        $this->bulkDelete();
+    }
+
+    #[\Livewire\Attributes\On('bulkDelete')]
+    public function bulkDelete(): void
+    {
+        $ids = $this->checkboxValues;
+
+        if (count($ids) === 0) {
+            $this->dispatch(
+                'toast',
+                text: 'Please select at least one record to delete.',
+                variant: 'error'
+            );
+            return;
+        }
+
+        try {
+            DB::transaction(function () use ($ids) {
+                $profiles = FacultyProfile::whereIn('id', $ids)->get();
+                $userIds = $profiles->pluck('user_id')->filter();
+
+                // Delete profiles first
+                FacultyProfile::whereIn('id', $ids)->delete();
+
+                // Delete associated users
+                if ($userIds->isNotEmpty()) {
+                    User::whereIn('id', $userIds)->delete();
+                }
+            });
+
+            $this->clearCheckBox();
+
+            $this->dispatch(
+                'toast',
+                text: count($ids) . ' records deleted successfully.',
+                heading: 'Success',
+                variant: 'success'
+            );
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'toast',
+                text: 'An error occurred while deleting records.',
+                variant: 'error'
+            );
+        }
+    }
+
+    public function actions(FacultyProfile $row): array
+    {
+        return [
+            Button::add('edit')
+                ->slot('Edit')
+                ->id()
+                ->class('pg-btn-white dark:ring-pg-primary-600')
+                ->dispatch('edit', ['rowId' => $row->id]),
+
+            // Individual delete button for a single row
+            Button::add('delete')
+                ->slot('Delete')
+                ->id()
+                ->class('text-red-500 hover:text-red-700')
+                ->dispatch('singleDelete', ['rowId' => $row->id])
         ];
     }
-    */
 }
