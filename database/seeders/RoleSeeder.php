@@ -41,10 +41,10 @@ class RoleSeeder extends Seeder
             ['user_id' => $facultyUser->id],
             [
                 'first_name' => 'Faculty',
-                'last_name'  => 'Account',
-                'branch'     => 'Main Campus',
+                'last_name' => 'Account',
+                'branch' => 'Main Campus',
                 'department' => 'DIT',
-                'email'      => 'sangangbayant@gmail.com',
+                'email' => 'sangangbayant@gmail.com',
             ]
         );
 

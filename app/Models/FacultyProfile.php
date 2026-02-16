@@ -26,13 +26,11 @@ class FacultyProfile extends Model
         'address',
         'sex',
         'birthday',
-        'updated_by'
+        'updated_by',
     ];
 
     /**
      * Get the user that owns the FacultyProfileFactory
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user(): BelongsTo
     {

@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use App\Models\FacultyProfile;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -30,9 +30,9 @@ class UserFactory extends Factory
 
             FacultyProfile::factory()->create([
                 'user_id' => $user->id,
-                'email'   => $user->email,
+                'email' => $user->email,
                 'first_name' => explode(' ', $user->name)[0],
-                'last_name'  => explode(' ', $user->name)[1] ?? 'Faculty',
+                'last_name' => explode(' ', $user->name)[1] ?? 'Faculty',
             ]);
         });
     }

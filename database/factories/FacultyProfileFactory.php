@@ -13,18 +13,18 @@ class FacultyProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'       => User::factory(),
-            'first_name'    => fake()->firstName(),
-            'middle_name'   => fake()->lastName(),
-            'last_name'     => fake()->lastName(),
-            'branch'        => fake()->randomElement(['Main Campus', 'Indang', 'Cavite City', 'Colleg of Engineering and Information Technology', 'College of Arts and Sciences']),
-            'department'    => fake()->randomElement(['DIT', 'DAS', 'DTE', 'DCEE', 'DBIO', 'DCS', 'DoE']),
+            'user_id' => User::factory(),
+            'first_name' => fake()->firstName(),
+            'middle_name' => fake()->lastName(),
+            'last_name' => fake()->lastName(),
+            'branch' => fake()->randomElement(['Main Campus', 'Indang', 'Cavite City', 'Colleg of Engineering and Information Technology', 'College of Arts and Sciences']),
+            'department' => fake()->randomElement(['DIT', 'DAS', 'DTE', 'DCEE', 'DBIO', 'DCS', 'DoE']),
             'academic_rank' => fake()->randomElement(['Instructor I', 'Assistant Professor', 'Professor']),
-            'email'         => fake()->unique()->safeEmail(),
-            'contactno'     => fake()->phoneNumber(),
-            'address'       => fake()->address(),
-            'sex'           => fake()->randomElement(['Male', 'Female']),
-            'birthday'      => fake()->date(),
+            'email' => fake()->unique()->safeEmail(),
+            'contactno' => fake()->phoneNumber(),
+            'address' => fake()->address(),
+            'sex' => fake()->randomElement(['Male', 'Female']),
+            'birthday' => fake()->date(),
         ];
     }
 }

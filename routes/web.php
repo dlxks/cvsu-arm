@@ -22,7 +22,6 @@ Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 Route::post('/logout', [GoogleAuthController::class, 'logout'])
     ->name('logout');
 
-
 /*
 |--------------------------------------------------------------------------
 | RESOLVER (SINGLE ENTRY POINT)
@@ -40,6 +39,6 @@ Route::middleware('auth')->get('/dashboard', function () {
     abort(403, 'You do not have a valid role assigned.');
 })->name('dashboard.resolve');
 
-require __DIR__ . '/settings.php';
-require __DIR__ . '/admin.php';
-require __DIR__ . '/faculty.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/admin.php';
+require __DIR__.'/faculty.php';
