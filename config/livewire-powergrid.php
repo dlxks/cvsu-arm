@@ -19,7 +19,7 @@ return [
 
     'icon_resources' => [
         'paths' => [
-            // 'default' => 'resources/views/components/icons',
+            'default' => 'resources/views/vendor/livewire-powergrid/components/icons',
             // 'outline' => 'vendor/wireui/wireui/resources/views/components/icons/outline',
             // 'solid'   => 'vendor/wireui/wireui/resources/views/components/icons/solid',
         ],
@@ -28,7 +28,7 @@ return [
             // 'pencil',
         ],
 
-        'attributes' => ['class' => 'w-5 text-red-600'],
+        // 'attributes' => ['class' => 'w-5 text-red-600'],
     ],
 
     /*
@@ -138,7 +138,7 @@ return [
     */
 
     'exportable' => [
-        'default' => 'openspout_v4',
+        'default' => 'openspout_v5',
         'openspout_v5' => [
             'xlsx' => \PowerComponents\LivewirePowerGrid\Components\Exports\OpenSpout\v5\ExportToXLS::class,
             'csv' => \PowerComponents\LivewirePowerGrid\Components\Exports\OpenSpout\v5\ExportToCsv::class,

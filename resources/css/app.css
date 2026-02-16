@@ -83,3 +83,23 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+/* Animations */
+@keyframes progress-indeterminate {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    50% {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.animate-progress-indeterminate {
+    width: 100%;
+    animation: progress-indeterminate 1.5s infinite linear;
+}

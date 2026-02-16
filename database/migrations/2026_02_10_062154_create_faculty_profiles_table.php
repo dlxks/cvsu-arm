@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('sex')->nullable();
             $table->date('birthday')->nullable();
             $table->foreignId('updated_by')->nullable()->constrained('users');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

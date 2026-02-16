@@ -52,7 +52,7 @@ new class extends Component {
         Flux::modal('add-faculty-modal')->close();
         $this->dispatch('pg:eventRefresh-facultyProfileTable');
         $this->reset();
-        // Flux::toast('Faculty member added successfully.');
+        Flux::toast('Faculty member added successfully.');
     }
 
     public function import()
@@ -90,7 +90,7 @@ new class extends Component {
         Flux::modal('import-faculty-modal')->close();
         $this->dispatch('pg:eventRefresh-facultyProfileTable');
         $this->reset('file');
-        // Flux::toast('Import completed successfully.');
+        Flux::toast('Import completed successfully.');
     }
 };
 ?>
@@ -101,13 +101,10 @@ new class extends Component {
         <h1 class="text-lg font-black">Faculty Management</h1>
 
         <div>
-            {{-- Import Faculty Date --}}
             <flux:modal.trigger name="import-faculty-modal">
-                <flux:button variant="outline" size="sm" icon="document-arrow-up">Import Faculty
-                </flux:button>
+                <flux:button variant="outline" size="sm" icon="document-arrow-up">Import Faculty</flux:button>
             </flux:modal.trigger>
 
-            {{-- Add Faculty Manually --}}
             <flux:modal.trigger name="add-faculty-modal">
                 <flux:button variant="primary" size="sm" icon="user-plus">Add Faculty</flux:button>
             </flux:modal.trigger>
@@ -119,16 +116,50 @@ new class extends Component {
         <form wire:submit="import" class="space-y-4">
             <div>
                 <flux:heading size="lg">Import Faculty</flux:heading>
-                <flux:subheading>Upload an Excel or CSV file to bulk add faculty members.
-                    <span class="text-red-500 italic">*Only Excel or CSV files are allowed.</span>
-                </flux:subheading>
+                <flux:subheading>Upload an Excel or CSV file to bulk add faculty members.</flux:subheading>
             </div>
 
-            <flux:input type="file" wire:model="file" size="sm" accept=".csv, .xlsx, .xls" />
+            {{-- Progress Logic for both Uploading and Processing --}}
+            <div x-data="{ uploading: false, progress: 0 }" x-on:livewire-upload-start="uploading = true"
+                x-on:livewire-upload-finish="uploading = false" x-on:livewire-upload-error="uploading = false"
+                x-on:livewire-upload-progress="progress = $event.detail.progress" class="space-y-3">
+                <flux:input type="file" wire:model="file" size="sm" accept=".csv, .xlsx, .xls" />
+
+                {{-- 1. Progress Bar for File Upload --}}
+                <div x-show="uploading">
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs font-medium text-blue-700 dark:text-blue-400">Uploading File...</span>
+                        <span class="text-xs font-medium text-blue-700 dark:text-blue-400"
+                            x-text="progress + '%'"></span>
+                    </div>
+                    <div class="w-full bg-zinc-200 dark:bg-zinc-700 rounded-full h-2">
+                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                            x-bind:style="'width: ' + progress + '%'"></div>
+                    </div>
+                </div>
+
+                {{-- 2. Progress Indicator for Server-Side Import --}}
+                <div wire:loading wire:target="import" class="w-full">
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xs font-medium text-amber-700 dark:text-amber-400">Processing
+                            records...</span>
+                    </div>
+                    <div class="w-full bg-zinc-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
+                        <div class="bg-amber-500 h-2 rounded-full animate-progress-indeterminate"></div>
+                    </div>
+                </div>
+            </div>
 
             <div class="flex">
                 <flux:spacer />
-                <flux:button type="submit" variant="primary" size="sm">Start Import</flux:button>
+                <flux:button type="submit" variant="primary" size="sm" wire:loading.attr="disabled"
+                    wire:target="import">
+                    <span wire:loading.remove wire:target="import">Start Import</span>
+                    <span wire:loading wire:target="import" class="flex items-center gap-2">
+                        <flux:icon.arrow-path class="animate-spin w-4 h-4" />
+                        Please wait...
+                    </span>
+                </flux:button>
             </div>
         </form>
     </flux:modal>
@@ -138,36 +169,41 @@ new class extends Component {
         <form wire:submit="save" class="space-y-6">
             <div>
                 <flux:heading size="lg">Add New Faculty</flux:heading>
-                <flux:subheading>Enter the details for the new faculty account.</flux:subheading>
+                <flux:subheading>Enter details for manual creation.</flux:subheading>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-                <flux:input wire:model="first_name" label="First Name" size="sm" placeholder="John" />
-                <flux:input wire:model="last_name" label="Last Name" size="sm" placeholder="Doe" />
+                <flux:input wire:model="first_name" label="First Name" size="sm" />
+                <flux:input wire:model="last_name" label="Last Name" size="sm" />
             </div>
 
-            <flux:input wire:model="email" type="email" label="Email Address" size="sm"
-                placeholder="john@example.com" />
+            <flux:input wire:model="email" type="email" label="Email Address" size="sm" />
 
             <div class="grid grid-cols-2 gap-4">
                 <flux:select wire:model="branch" label="Branch" size="sm">
                     <flux:select.option value="Main">Main</flux:select.option>
                     <flux:select.option value="Extension">Extension</flux:select.option>
                 </flux:select>
-
-                <flux:input wire:model="department" label="Department" placeholder="IT Department" />
+                <flux:input wire:model="department" label="Department" size="sm" />
             </div>
 
             <div class="flex">
                 <flux:spacer />
-                <flux:button type="submit" variant="primary" size="sm">Create Account</flux:button>
+                <flux:button type="submit" variant="primary" size="sm" wire:loading.attr="disabled" wire:target="save">
+                    <span wire:loading.remove wire:target="save">Create Account</span>
+                    <span wire:loading wire:target="save">Saving...</span>
+                </flux:button>
             </div>
         </form>
     </flux:modal>
 
-    {{-- Faculty Data Table --}}
-    <livewire:admin.faculty-profile-table />
-
-
-
+    {{-- Table Section with Loading --}}
+    <div class="relative min-h-100">
+        <div wire:loading wire:target="import, save"
+            class="absolute inset-0 z-10 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-[2px] flex flex-col items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800">
+            <flux:icon.arrow-path class="animate-spin w-10 h-10 text-primary mb-2" />
+            <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Updating Faculty Table...</p>
+        </div>
+        <livewire:admin.faculty-profile-table lazy />
+    </div>
 </div>

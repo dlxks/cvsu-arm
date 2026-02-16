@@ -49,7 +49,7 @@ class RoleSeeder extends Seeder
         );
 
         // 4. Create Mass Random Data
-        // This will create 10 users, assign roles, and create profiles automatically
-        User::factory(5)->faculty()->create();
+        // This will create 25 users, assign roles, and create profiles automatically
+        User::factory(25)->faculty()->create();
     }
 }

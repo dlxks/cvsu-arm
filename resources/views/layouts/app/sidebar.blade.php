@@ -5,7 +5,7 @@
     @include('partials.head')
 </head>
 
-<body class="min-h-screen bg-white dark:bg-zinc-800">
+<body class="min-h-screen bg-white dark:bg-zinc-800 max-w-7xl mx-auto">
     <flux:sidebar sticky collapsible="mobile"
         class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         {{-- Sidebar Header --}}
@@ -24,7 +24,7 @@
         <flux:sidebar.nav>
             <flux:sidebar.group heading="Main" class="grid">
                 {{-- Dashboard Link --}}
-                <flux:sidebar.item icon="home" :href="route('dashboard.resolve')" :current="request()->routeIs(
+                <flux:sidebar.item icon="home" class="mb-2" :href="route('dashboard.resolve')" :current="request()->routeIs(
                         'admin.dashboard',
                         'faculty.dashboard'
                     )" wire:navigate>
@@ -34,7 +34,7 @@
                 <flux:separator />
 
                 {{-- Teaching --}}
-                <flux:sidebar.group heading="Teaching" class="grid">
+                <flux:sidebar.group heading="Teaching" class="grid mb-4">
                     <flux:sidebar.item icon="clipboard-document-list" href="#">
                         Schedules &amp; Subjects
                     </flux:sidebar.item>
@@ -45,21 +45,30 @@
                 <flux:separator />
 
                 {{-- Research & Extensions --}}
-                <flux:sidebar.group heading="Research & Extension" class="grid">
+                <flux:sidebar.group heading="Research & Extension" class="grid mb-4">
                     <flux:sidebar.item icon="book-open" href="#">Researches</flux:sidebar.item>
                     <flux:sidebar.item icon="document-text" href="#">Extensions</flux:sidebar.item>
                 </flux:sidebar.group>
-            </flux:sidebar.group>
 
+                {{-- User Management --}}
+                @role('admin')
+                <flux:separator />
+                <flux:sidebar.group class="grid">
+                    {{-- Administration --}}
+                    <flux:sidebar.group expandable heading="Branch Management" class="grid mb-4">
+                        <flux:sidebar.item icon="building-library" href="#">Branches / Colleges</flux:sidebar.item>
+                        <flux:sidebar.item icon="briefcase" href="#">Departments</flux:sidebar.item>
+                    </flux:sidebar.group>
+                    <flux:separator />
 
-            {{-- User Management --}}
-            @role('admin')
-            <flux:separator />
-            <flux:sidebar.group expandable heading="System" class="grid">
-                <flux:sidebar.item icon="identification" :href="route('admin.faculty')" :current="request()->routeIs(
+                    {{-- Users / Faculty List --}}
+                    <flux:sidebar.group expandable heading="System" class="grid mb-4">
+                        <flux:sidebar.item icon="identification" :href="route('admin.faculty')" :current="request()->routeIs(
                         'admin.faculty',
                     )" wire:navigate>Faculty List</flux:sidebar.item>
-                <flux:sidebar.item icon="users" href="#">Users</flux:sidebar.item>
+                        <flux:sidebar.item icon="users" href="#">Users</flux:sidebar.item>
+                    </flux:sidebar.group>
+                </flux:sidebar.group>
             </flux:sidebar.group>
             @endrole
         </flux:sidebar.nav>
