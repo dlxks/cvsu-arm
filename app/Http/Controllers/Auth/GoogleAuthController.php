@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 
 class GoogleAuthController extends Controller
 {
@@ -21,19 +21,19 @@ class GoogleAuthController extends Controller
             $googleUser = Socialite::driver('google')->user();
             $email = $googleUser->getEmail();
 
-            // 1. Domain Restriction
-            if (!Str::endsWith($email, ['@cvsu.edu.ph', '@gmail.com'])) {
+            //  Domain Restriction
+            if (! Str::endsWith($email, ['@cvsu.edu.ph', '@gmail.com'])) {
                 return redirect('/')->with('error', 'CvSU - Academic Resource Management can only be used within its organization.');
             }
 
-            // 2. Manual User Check
+            // Manual User Check
             $user = User::where('email', $email)->first();
 
-            if (!$user) {
+            if (! $user) {
                 return redirect('/')->with('error', 'Access denied. You are not registered in the system.');
             }
 
-            // 3. Update & Login
+            // Update & Login
             $user->update([
                 'google_id' => $googleUser->getId(),
                 'avatar' => $googleUser->getAvatar(),
@@ -41,7 +41,7 @@ class GoogleAuthController extends Controller
 
             Auth::login($user);
 
-            // 4. Role Redirection matching web.php
+            // Role Redirection matching web.php
             return redirect()->route('dashboard.resolve');
 
             // Fallback for users with no role
@@ -54,6 +54,7 @@ class GoogleAuthController extends Controller
     public function logout()
     {
         Auth::logout();
+
         return redirect()->route('login');
     }
 }

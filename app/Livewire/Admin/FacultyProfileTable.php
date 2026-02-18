@@ -23,15 +23,17 @@ final class FacultyProfileTable extends PowerGridComponent
     public string $tableName = 'facultyProfileTable';
 
     // Default sorting
-    public string $sortField = 'created_at';
+    public string $sortField = 'first_name';
 
-    public string $sortDirection = 'desc';
+    public string $sortDirection = 'asc';
 
     // State for deletion
     public ?int $deleteId = null;
 
     // State for force deletion
     public ?int $forceDeleteId = null;
+
+    public string $softDeletes = 'withTrashed';
 
     /* -----------------------------------------------------------------
            CONFIGURATION
@@ -72,7 +74,8 @@ final class FacultyProfileTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return FacultyProfile::query()->with('user');
+        return FacultyProfile::query()
+            ->with('user');
     }
 
     public function relationSearch(): array

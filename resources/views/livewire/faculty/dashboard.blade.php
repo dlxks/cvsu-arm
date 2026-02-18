@@ -3,8 +3,7 @@
 use Livewire\Volt\Component;
 use Livewire\Attributes\Layout;
 
-new #[Layout('layouts.app')] 
-class extends Component {
+new #[Layout('layouts.app')] class extends Component {
     public string $academicTerm = '2025–2026';
 
     public function with(): array
@@ -15,14 +14,15 @@ class extends Component {
     }
 }; ?>
 
-<div class="p-8">
-    <flux:heading size="xl" level="1">{{ __('Faculty Dashboard') }}</flux:heading>
-    <flux:subheading>{{ __('Academic Term: :term', ['term' => $academicTerm]) }}</flux:subheading>
+<div class="space-y-6">
+    <header>
+        <flux:heading size="xl" level="1">{{ __('Faculty Dashboard') }}</flux:heading>
+        <flux:subheading>{{ __('Academic Term: :term', ['term' => $academicTerm]) }}</flux:subheading>
+    </header>
 
-    <flux:separator class="my-6" />
+    <flux:separator />
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {{-- My Subjects --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{{-- My Subjects --}}
         <flux:card>
             <flux:icon.book-open class="mb-2" />
 

@@ -17,6 +17,7 @@ Route::middleware(['auth', 'role:admin'])
         Volt::route('/dashboard', 'admin.dashboard')
             ->name('dashboard');
 
+        // Faculty Management Routes
         Volt::route('/faculty', 'admin.faculty.index')->name('faculty');
         Volt::route('/faculty/{faculty}/edit', 'admin.faculty.edit')->name('faculty.edit');
         Volt::route('/faculty/{faculty}', 'admin.faculty.show')->name('faculty.show');
