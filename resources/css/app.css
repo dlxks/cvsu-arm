@@ -1,4 +1,9 @@
 @import 'tailwindcss';
+
+@import '../../vendor/tallstackui/tallstackui/css/v4.css';
+@plugin '@tailwindcss/forms';
+@source '../../vendor/tallstackui/tallstackui/**/*.php';
+
 @import '../../vendor/livewire/flux/dist/flux.css';
 @import '../../vendor/power-components/livewire-powergrid/resources/css/tailwind4.css';
 

@@ -10,11 +10,11 @@ class RoleSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Ensure Roles Exist
+        // Ensure Roles Exist
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $facultyRole = Role::firstOrCreate(['name' => 'faculty']);
 
-        // 2. Create/Update Specific Admin
+        // Create/Update Specific Admin
         $admin = User::updateOrCreate(
             ['email' => 'tristan.sangangbayan@cvsu.edu.ph'],
             [
@@ -25,7 +25,7 @@ class RoleSeeder extends Seeder
         );
         $admin->assignRole($adminRole);
 
-        // 3. Create/Update Specific Faculty
+        // Create/Update Specific Faculty
         $facultyUser = User::updateOrCreate(
             ['email' => 'sangangbayant@gmail.com'],
             [
@@ -48,7 +48,7 @@ class RoleSeeder extends Seeder
             ]
         );
 
-        // 4. Create Mass Random Data
+        // Create Mass Random Data
         // This will create 25 users, assign roles, and create profiles automatically
         User::factory(25)->faculty()->create();
     }

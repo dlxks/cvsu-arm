@@ -6,6 +6,7 @@
 </head>
 
 <body class="min-h-screen bg-white dark:bg-zinc-800  max-w-7xl mx-auto">
+    <x-toast />
 
     <div class="flex min-h-screen">
 
@@ -57,9 +58,11 @@
                     <flux:sidebar.group class="grid">
 
                         <flux:sidebar.group expandable heading="Branch Management" class="grid mb-4">
-                            <flux:sidebar.item icon="building-library" href="#">
+                            <flux:sidebar.item icon="building-library" :href="route('admin.branches')"
+                                :current="request()->routeIs('admin.branches')" wire:navigate>
                                 Branches / Colleges
                             </flux:sidebar.item>
+
                             <flux:sidebar.item icon="briefcase" href="#">
                                 Departments
                             </flux:sidebar.item>

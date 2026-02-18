@@ -22,7 +22,7 @@ Route::middleware(['auth', 'role:admin'])
         Volt::route('/faculty/{faculty}/edit', 'admin.faculty.edit')->name('faculty.edit');
         Volt::route('/faculty/{faculty}', 'admin.faculty.show')->name('faculty.show');
 
-        // Volt::route('/faculty', 'pages.admin.faculty.index')->name('faculty.index');
+        Volt::route('/branches', 'admin.branches.index')->name('branches');
         // Volt::route('/faculty/{faculty}/edit', 'pages.admin.faculty.edit')->name('faculty.edit');
         // Volt::route('/faculty/{faculty}', 'pages.admin.faculty.show')->name('faculty.show');
         // Volt::route('/faculty/create', 'pages.admin.faculty.create')->name('faculty.create');

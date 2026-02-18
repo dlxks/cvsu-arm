@@ -7,9 +7,10 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Flux\Flux;
+use TallStackUi\Traits\Interactions;
 
 new class extends Component {
-    use WithFileUploads;
+    use WithFileUploads, Interactions;
 
     public $first_name = '';
     public $last_name = '';
@@ -52,7 +53,9 @@ new class extends Component {
         Flux::modal('add-faculty-modal')->close();
         $this->dispatch('pg:eventRefresh-facultyProfileTable');
         $this->reset();
-        Flux::toast('Faculty member added successfully.');
+        $this->toast()
+                ->success('Success', 'Faculty member added successfully.')
+                ->send();
     }
 
     public function import()
@@ -90,7 +93,9 @@ new class extends Component {
         Flux::modal('import-faculty-modal')->close();
         $this->dispatch('pg:eventRefresh-facultyProfileTable');
         $this->reset('file');
-        Flux::toast('Import completed successfully.');
+        $this->toast()
+                ->success('Success', 'Faculty profiles have been imported.')
+                ->send();
     }
 };
 ?>
@@ -111,6 +116,17 @@ new class extends Component {
         </div>
     </div>
 
+    {{-- Table Section with Loading --}}
+    <div class="relative min-h-100">
+        <div wire:loading wire:target="import, save"
+            class="absolute inset-0 z-10 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-[2px] flex flex-col items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800">
+            <flux:icon.arrow-path class="animate-spin w-10 h-10 text-primary mb-2" />
+            <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Updating Faculty Table...</p>
+        </div>
+        <livewire:admin.faculty-profile-table lazy />
+    </div>
+
+    {{-- MODALS --}}
     {{-- Import Modal --}}
     <flux:modal name="import-faculty-modal" class="md:w-96">
         <form wire:submit="import" class="space-y-4">
@@ -196,14 +212,4 @@ new class extends Component {
             </div>
         </form>
     </flux:modal>
-
-    {{-- Table Section with Loading --}}
-    <div class="relative min-h-100">
-        <div wire:loading wire:target="import, save"
-            class="absolute inset-0 z-10 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-[2px] flex flex-col items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800">
-            <flux:icon.arrow-path class="animate-spin w-10 h-10 text-primary mb-2" />
-            <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Updating Faculty Table...</p>
-        </div>
-        <livewire:admin.faculty-profile-table lazy />
-    </div>
 </div>
