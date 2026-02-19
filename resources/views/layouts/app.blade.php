@@ -63,7 +63,8 @@
                                 Branches / Colleges
                             </flux:sidebar.item>
 
-                            <flux:sidebar.item icon="briefcase" href="#">
+                            <flux:sidebar.item icon="briefcase" :href="route('admin.departments')"
+                                :current="request()->routeIs('admin.departments')" wire:navigate>
                                 Departments
                             </flux:sidebar.item>
                         </flux:sidebar.group>

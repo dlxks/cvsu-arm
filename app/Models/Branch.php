@@ -4,17 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Branch extends Model
 {
     use HasFactory, SoftDeletes;
-
-    // keyType is string, not integer
-    protected $keyType = 'string';
-
-    // Disable auto-incrementing
-    public $incrementing = false;
 
     protected $fillable = [
         'branch_id',
@@ -54,5 +49,13 @@ class Branch extends Model
         $nextNumber = str_pad($number + 1, 3, '0', STR_PAD_LEFT);
 
         return "{$prefix}{$nextNumber}";
+    }
+
+    /**
+     * Relationships declaration
+     */
+    public function departments(): HasMany
+    {
+        return $this->hasMany(Department::class, 'branch_id', 'branch_id');
     }
 }

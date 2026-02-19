@@ -256,7 +256,7 @@ final class BranchesTable extends PowerGridComponent
         return [
             // Edit button
             Button::add('edit')
-                ->icon('default-pencil', ['class' => 'w-5 h-5 text-blue-500 group-hover:text-blue-700'])
+                ->icon('default-pencil-square', ['class' => 'w-5 h-5 text-blue-500 group-hover:text-blue-700'])
                 ->class('group cursor-pointer')
                 ->dispatch('edit-branch', ['id' => $row->id]), // Sending string ID
 
