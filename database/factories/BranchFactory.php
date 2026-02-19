@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Branch;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BranchFactory extends Factory
@@ -12,11 +11,15 @@ class BranchFactory extends Factory
 
     public function definition(): array
     {
+        $type = $this->faker->randomElement(['Main', 'Satellite']);
+
         return [
-            'branch_code' => strtoupper($this->faker->unique()->lexify('BR???')),
-            'branch_name' => $this->faker->company(),
-            'branch_location' => $this->faker->city(),
-            'updated_by' => User::inRandomOrder()->first()?->id ?? null,
+            'branch_id' => Branch::generateNextId($type),
+            'code' => strtoupper($this->faker->unique()->lexify('????')),
+            'name' => 'CvSU '.$type.' - '.$this->faker->city,
+            'type' => $type,
+            'address' => $this->faker->address,
+            'is_active' => true,
         ];
     }
 }

@@ -10,11 +10,12 @@ return new class extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
-            $table->string('code');
+            $table->string('branch_id')->unique(); // e.g., CvSU-M001
+            $table->string('code')->unique();
             $table->string('name');
+            $table->string('type'); // Main, Satellite
             $table->string('address')->nullable();
-            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -4,39 +4,55 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Branch extends Model
 {
     use HasFactory, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    // keyType is string, not integer
+    protected $keyType = 'string';
+
+    // Disable auto-incrementing
+    public $incrementing = false;
+
     protected $fillable = [
-        'type',      // 'MAIN' or 'EXTENSION'
-        'code',      // e.g., 'CEIT', 'SILANG'
-        'name',      // e.g., 'College of Engineering...', 'Silang Campus'
+        'branch_id',
+        'code',
+        'name',
+        'type',
         'address',
-        'updated_by',
+        'is_active',
     ];
 
     /**
-     * Accessor to display "MAIN - CEIT" or "EXTENSION - SILANG"
+     * Generate the next available ID based on the type.
+     * M = Main (CvSU-M001), S = Satellite (CvSU-S001)
      */
-    public function getDisplayTitleAttribute(): string
+    public static function generateNextId(string $type): string
     {
-        return $this->type.' - '.$this->code;
-    }
+        $prefixMap = [
+            'Main' => 'M',
+            'Satellite' => 'S',
+        ];
 
-    /**
-     * Get the user who last updated the branch.
-     */
-    public function updatedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'updated_by');
+        $char = $prefixMap[$type] ?? 'O';
+        $prefix = "CvSU-{$char}";
+
+        // Search against branch_id instead of id
+        $latest = self::where('branch_id', 'LIKE', "{$prefix}%")
+            ->orderByRaw('LENGTH(branch_id) DESC')
+            ->orderBy('branch_id', 'desc')
+            ->first();
+
+        if (! $latest) {
+            return "{$prefix}001";
+        }
+
+        $numberPart = str_replace($prefix, '', $latest->branch_id); // Target branch_id
+        $number = (int) $numberPart;
+        $nextNumber = str_pad($number + 1, 3, '0', STR_PAD_LEFT);
+
+        return "{$prefix}{$nextNumber}";
     }
 }

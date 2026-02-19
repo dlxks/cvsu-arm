@@ -1,15 +1,18 @@
 <?php
 
-use Livewire\Volt\Component;
 use App\Models\FacultyProfile;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\Volt\Component;
 
-new #[Layout('layouts.app')] #[Title('Edit Faculty')] class extends Component {
+new #[Layout('layouts.app')] #[Title('Edit Faculty')] class extends Component
+{
     public FacultyProfile $faculty;
-    
+
     public string $first_name = '';
+
     public string $last_name = '';
+
     public string $email = '';
 
     public function mount(FacultyProfile $faculty): void
@@ -33,7 +36,7 @@ new #[Layout('layouts.app')] #[Title('Edit Faculty')] class extends Component {
             'last_name' => $this->last_name,
             'email' => $this->email,
         ]);
-        
+
         // Redirect back to the list
         $this->redirectRoute('admin.faculty', navigate: true);
     }

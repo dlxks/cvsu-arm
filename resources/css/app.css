@@ -1,9 +1,11 @@
 @import 'tailwindcss';
 
+/* TallStackUI Dependencies */
 @import '../../vendor/tallstackui/tallstackui/css/v4.css';
 @plugin '@tailwindcss/forms';
 @source '../../vendor/tallstackui/tallstackui/**/*.php';
 
+/* Flux UI Dependencies */
 @import '../../vendor/livewire/flux/dist/flux.css';
 @import '../../vendor/power-components/livewire-powergrid/resources/css/tailwind4.css';
 
@@ -14,49 +16,112 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Powergrid Dependencies */
 @source '../../app/Livewire/*Table.php';
 @source '../../app/Livewire/**/*Table.php';
 @source '../../vendor/power-components/livewire-powergrid/src/Themes/Tailwind.php';
 @source '../../vendor/power-components/livewire-powergrid/resources/views/**/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-    --color-zinc-50: #fafafa;
-    --color-zinc-100: #f5f5f5;
-    --color-zinc-200: #e5e5e5;
-    --color-zinc-300: #d4d4d4;
-    --color-zinc-400: #a3a3a3;
-    --color-zinc-500: #737373;
-    --color-zinc-600: #525252;
-    --color-zinc-700: #404040;
-    --color-zinc-800: #262626;
-    --color-zinc-900: #171717;
-    --color-zinc-950: #0a0a0a;
+    /*
+    |--------------------------------------------------------------------------
+    | Primary (Flux Neutral Zinc)
+    |--------------------------------------------------------------------------
+    */
+    --color-primary-50: #fafafa;
+    --color-primary-100: #f5f5f5;
+    --color-primary-200: #e5e5e5;
+    --color-primary-300: #d4d4d4;
+    --color-primary-400: #a3a3a3;
+    --color-primary-500: #737373;
+    --color-primary-600: #525252;
+    --color-primary-700: #404040;
+    --color-primary-800: #262626;
+    --color-primary-900: #171717;
+    --color-primary-950: #0a0a0a;
 
-    --color-accent: var(--color-green-600);
-    --color-accent-content: var(--color-green-600);
-    --color-accent-foreground: var(--color-white);
+    /*
+    |--------------------------------------------------------------------------
+    | Secondary (Surface Variant)
+    |--------------------------------------------------------------------------
+    */
+    --color-secondary-50: #f8fafc;
+    --color-secondary-100: #f1f5f9;
+    --color-secondary-200: #e2e8f0;
+    --color-secondary-300: #cbd5e1;
+    --color-secondary-400: #94a3b8;
+    --color-secondary-500: #64748b;
+    --color-secondary-600: #475569;
+    --color-secondary-700: #334155;
+    --color-secondary-800: #1e293b;
+    --color-secondary-900: #0f172a;
+    --color-secondary-950: #020617;
 
-    /* Powergrid Theme */
-    --color-pg-primary-50: oklch(0.985 0 0);
-    --color-pg-primary-100: oklch(0.97 0 0);
-    --color-pg-primary-200: oklch(0.922 0 0);
-    --color-pg-primary-300: oklch(0.87 0 0);
-    --color-pg-primary-400: oklch(0.708 0 0);
-    --color-pg-primary-500: oklch(0.556 0 0);
-    --color-pg-primary-600: oklch(0.439 0 0);
-    --color-pg-primary-700: oklch(0.371 0 0);
-    --color-pg-primary-800: oklch(0.269 0 0);
-    --color-pg-primary-900: oklch(0.205 0 0);
-    --color-pg-primary-950: oklch(0.145 0 0);
+    /*
+    |--------------------------------------------------------------------------
+    | Dark (Dark Surface System)
+    |--------------------------------------------------------------------------
+    */
+    --color-dark-50: #fafafa;
+    --color-dark-100: #f5f5f5;
+    --color-dark-200: #e5e5e5;
+    --color-dark-300: #d4d4d4;
+    --color-dark-400: #a3a3a3;
+    --color-dark-500: #737373;
+    --color-dark-600: #525252;
+    --color-dark-700: #404040;
+    --color-dark-800: #262626;
+    --color-dark-900: #171717;
+    --color-dark-950: #0a0a0a;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accent (Flux Green Accent)
+    |--------------------------------------------------------------------------
+    */
+    --color-accent-50: #f0fdf4;
+    --color-accent-100: #dcfce7;
+    --color-accent-200: #bbf7d0;
+    --color-accent-300: #86efac;
+    --color-accent-400: #4ade80;
+    --color-accent-500: #22c55e;
+    --color-accent-600: #16a34a;
+    --color-accent-700: #15803d;
+    --color-accent-800: #166534;
+    --color-accent-900: #14532d;
+    --color-accent-950: #052e16;
+
+    --color-accent: var(--color-accent-600);
+    --color-accent-content: var(--color-accent-600);
+    --color-accent-foreground: #ffffff;
+
+    /*
+    |--------------------------------------------------------------------------
+    | PowerGrid Primary (Aligned With Zinc)
+    |--------------------------------------------------------------------------
+    */
+    --color-pg-primary-50: #fafafa;
+    --color-pg-primary-100: #f5f5f5;
+    --color-pg-primary-200: #e5e5e5;
+    --color-pg-primary-300: #d4d4d4;
+    --color-pg-primary-400: #a3a3a3;
+    --color-pg-primary-500: #737373;
+    --color-pg-primary-600: #525252;
+    --color-pg-primary-700: #404040;
+    --color-pg-primary-800: #262626;
+    --color-pg-primary-900: #171717;
+    --color-pg-primary-950: #0a0a0a;
 }
+
 
 @layer theme {
     .dark {
-        --color-accent: var(--color-green-600);
-        --color-accent-content: var(--color-green-400);
-        --color-accent-foreground: var(--color-white);
+        --color-accent: var(--color-accent-500);
+        --color-accent-content: var(--color-accent-400);
+        --color-accent-foreground: #ffffff;
     }
 }
 
@@ -90,6 +155,7 @@ select:focus[data-flux-control] {
 } */
 
 /* Animations */
+/* Progress Bar Anmiation */
 @keyframes progress-indeterminate {
     0% {
         transform: translateX(-100%);
